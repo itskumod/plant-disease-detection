@@ -6,14 +6,20 @@ from PIL import Image
 from tensorflow.keras.layers import Dense, InputLayer
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# PAGE CONFIG
+# ══════════════════════════════════════════════════════════════════════════════
+
 st.set_page_config(
-    page_title="Plant Disease Detector",
+    page_title="AgriCare – Plant Disease Detector",
     page_icon="🌿",
     layout="centered"
 )
 
 
-# -------------------- CUSTOM CSS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# CUSTOM CSS
+# ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
 <style>
@@ -38,25 +44,79 @@ html, body, [class*="css"] {
     min-height: 100vh;
 }
 
+
+/* ═══════════════════════════════════════
+   AGRICARE NAVIGATION
+   ═══════════════════════════════════════ */
+
+.agri-nav {
+    background: linear-gradient(
+        135deg,
+        #102b14 0%,
+        #1f5424 100%
+    );
+
+    border: 1px solid rgba(86,171,47,0.35);
+    border-radius: 16px;
+
+    padding: 14px;
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35);
+}
+
+.agri-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+
+    color: #a8e063;
+
+    margin-bottom: 3px;
+}
+
+.agri-subtitle {
+    color: #6a9a65;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+}
+
+
+/* ═══════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════ */
+
 .hero-title {
     text-align: center;
+
     font-family: 'Syne', sans-serif;
+
     font-size: 2.8rem;
     font-weight: 800;
+
     background: linear-gradient(
         90deg,
         #56ab2f,
         #a8e063,
         #56ab2f
     );
+
     background-size: 200%;
+
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+
     animation: shimmer 3s infinite linear;
+
     margin-bottom: 0.2rem;
 }
 
+
 @keyframes shimmer {
+
     0% {
         background-position: 0%;
     }
@@ -64,156 +124,273 @@ html, body, [class*="css"] {
     100% {
         background-position: 200%;
     }
+
 }
+
 
 .hero-subtitle {
     text-align: center;
+
     color: #4a7a45;
+
     font-size: 1rem;
+
     letter-spacing: 1.5px;
+
     text-transform: uppercase;
+
     margin-bottom: 1.5rem;
 }
 
+
+/* ═══════════════════════════════════════
+   STAT CARDS
+   ═══════════════════════════════════════ */
+
 .stat-card {
     background: rgba(86,171,47,0.07);
+
     border: 1px solid rgba(86,171,47,0.2);
+
     border-radius: 14px;
+
     padding: 1rem;
+
     text-align: center;
 }
 
+
 .stat-label {
     color: #4a7a45;
+
     font-size: 0.75rem;
+
     letter-spacing: 1px;
+
     text-transform: uppercase;
 }
 
+
 .stat-value {
     color: #a8e063;
+
     font-size: 1.4rem;
+
     font-weight: 700;
+
     font-family: 'Syne', sans-serif;
 }
 
+
+/* ═══════════════════════════════════════
+   RESULT CARD
+   ═══════════════════════════════════════ */
+
 .result-card {
+
     background: linear-gradient(
         135deg,
         rgba(20,45,18,0.9),
         rgba(10,25,10,0.95)
     );
+
     border: 1px solid rgba(86,171,47,0.4);
+
     border-radius: 20px;
+
     padding: 1.8rem;
+
     margin-top: 1rem;
+
     box-shadow:
         0 8px 32px rgba(0,0,0,0.5),
         0 0 0 1px rgba(86,171,47,0.1);
 }
 
+
 .result-label {
     color: #4a7a45;
+
     font-size: 0.72rem;
+
     letter-spacing: 2px;
+
     text-transform: uppercase;
+
     margin-bottom: 0.4rem;
 }
 
+
 .disease-name {
+
     font-family: 'Syne', sans-serif;
+
     font-size: 1.5rem;
+
     font-weight: 700;
+
     color: #c8f0b0;
+
     margin-bottom: 0.6rem;
+
     line-height: 1.3;
 }
 
+
+/* ═══════════════════════════════════════
+   BADGES
+   ═══════════════════════════════════════ */
+
 .badge-healthy {
+
     display: inline-block;
+
     background: rgba(80,200,100,0.15);
+
     border: 1px solid rgba(80,200,100,0.4);
+
     color: #80e890;
+
     padding: 3px 14px;
+
     border-radius: 50px;
+
     font-size: 0.8rem;
+
     letter-spacing: 0.5px;
 }
+
 
 .badge-disease {
+
     display: inline-block;
+
     background: rgba(200,90,70,0.15);
+
     border: 1px solid rgba(200,90,70,0.4);
+
     color: #e89070;
+
     padding: 3px 14px;
+
     border-radius: 50px;
+
     font-size: 0.8rem;
+
     letter-spacing: 0.5px;
 }
+
 
 .badge-warn {
+
     display: inline-block;
+
     background: rgba(200,160,50,0.15);
+
     border: 1px solid rgba(200,160,50,0.4);
+
     color: #e8c870;
+
     padding: 3px 14px;
+
     border-radius: 50px;
+
     font-size: 0.8rem;
+
     letter-spacing: 0.5px;
 }
 
+
+/* ═══════════════════════════════════════
+   CONFIDENCE
+   ═══════════════════════════════════════ */
+
 .conf-track {
+
     background: rgba(255,255,255,0.06);
+
     border-radius: 50px;
+
     height: 8px;
+
     margin: 1rem 0 0.3rem;
+
     overflow: hidden;
 }
 
+
 .conf-fill-green {
+
     height: 100%;
+
     background: linear-gradient(
         90deg,
         #2d7a28,
         #a8e063
     );
+
     border-radius: 50px;
 }
 
+
 .conf-fill-yellow {
+
     height: 100%;
+
     background: linear-gradient(
         90deg,
         #7a6a10,
         #e8c840
     );
+
     border-radius: 50px;
 }
 
+
 .conf-fill-red {
+
     height: 100%;
+
     background: linear-gradient(
         90deg,
         #7a2010,
         #e86040
     );
+
     border-radius: 50px;
 }
 
+
+/* ═══════════════════════════════════════
+   PREDICTIONS
+   ═══════════════════════════════════════ */
+
 .pred-row {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     padding: 6px 0;
+
     border-bottom: 1px solid rgba(255,255,255,0.04);
+
     color: #6a9a65;
+
     font-size: 0.85rem;
 }
 
+
 .pred-bar {
+
     height: 3px;
+
     border-radius: 2px;
+
     margin-top: 3px;
+
     background: linear-gradient(
         90deg,
         #3a7a30,
@@ -221,33 +398,61 @@ html, body, [class*="css"] {
     );
 }
 
+
+/* ═══════════════════════════════════════
+   TIPS
+   ═══════════════════════════════════════ */
+
 .tip-box {
+
     background: rgba(200,160,50,0.07);
+
     border-left: 3px solid #c8a030;
+
     border-radius: 0 12px 12px 0;
+
     padding: 0.9rem 1.1rem;
+
     color: #c8b060;
+
     font-size: 0.87rem;
+
     line-height: 1.6;
+
     margin-top: 1rem;
 }
 
+
 .warn-low {
+
     background: rgba(200,70,50,0.07);
+
     border-left: 3px solid #c04030;
+
     border-radius: 0 12px 12px 0;
+
     padding: 0.8rem 1rem;
+
     color: #e09080;
+
     font-size: 0.85rem;
+
     margin-top: 0.5rem;
 }
 
+
 .tab-header {
+
     color: #4a7a45;
+
     font-size: 0.78rem;
+
     letter-spacing: 2px;
+
     text-transform: uppercase;
+
     margin-bottom: 0.8rem;
+
     margin-top: 1.2rem;
 }
 
@@ -255,9 +460,64 @@ html, body, [class*="css"] {
 """, unsafe_allow_html=True)
 
 
-# -------------------- TREATMENT TIPS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# AGRICARE NAVIGATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+<div class="agri-nav">
+
+    <div class="agri-title">
+        🌱 AgriCare
+    </div>
+
+    <div class="agri-subtitle">
+        Smart Agriculture Assistant
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
+
+
+nav1, nav2, nav3 = st.columns(3)
+
+
+with nav1:
+
+    st.link_button(
+        "🌿 Disease Detection",
+        "https://plant-disease-detection21.streamlit.app/",
+        use_container_width=True
+    )
+
+
+with nav2:
+
+    st.link_button(
+        "🌾 Crop Recommendation",
+        "https://crop-recommendation21.streamlit.app/",
+        use_container_width=True
+    )
+
+
+with nav3:
+
+    st.link_button(
+        "🤖 Kisan Mitra",
+        "https://farmer-chatbot21.streamlit.app/",
+        use_container_width=True
+    )
+
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TREATMENT TIPS
+# ══════════════════════════════════════════════════════════════════════════════
 
 TIPS = {
+
     "healthy":
         "✅ Your plant looks healthy! Keep up good watering, sunlight, and air circulation.",
 
@@ -297,9 +557,11 @@ TIPS = {
 
 
 def get_tip(name):
+
     nl = name.lower()
 
     for kw, tip in TIPS.items():
+
         if kw in nl:
             return tip
 
@@ -309,7 +571,9 @@ def get_tip(name):
     )
 
 
-# -------------------- PATCH LAYERS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# PATCH LAYERS
+# ══════════════════════════════════════════════════════════════════════════════
 
 class PatchedDense(Dense):
 
@@ -335,9 +599,13 @@ class PatchedInputLayer(InputLayer):
         super().__init__(*args, **kwargs)
 
 
-# -------------------- PATHS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# PATHS
+# ══════════════════════════════════════════════════════════════════════════════
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
 
 MODEL_PATH = os.path.join(
     BASE_DIR,
@@ -351,7 +619,9 @@ CLASS_NAMES_PATH = os.path.join(
 )
 
 
-# -------------------- LOAD MODEL --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# LOAD MODEL
+# ══════════════════════════════════════════════════════════════════════════════
 
 @st.cache_resource
 def load_model():
@@ -367,7 +637,9 @@ def load_model():
             return None
 
         return tf.keras.models.load_model(
+
             MODEL_PATH,
+
             custom_objects={
                 "Dense": PatchedDense,
                 "InputLayer": PatchedInputLayer
@@ -383,7 +655,9 @@ def load_model():
         return None
 
 
-# -------------------- LOAD CLASS NAMES --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# LOAD CLASS NAMES
+# ══════════════════════════════════════════════════════════════════════════════
 
 @st.cache_resource
 def load_classes():
@@ -414,11 +688,15 @@ def load_classes():
         return []
 
 
-# -------------------- PREPROCESS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# PREPROCESS
+# ══════════════════════════════════════════════════════════════════════════════
 
 def preprocess_image(image, h, w):
 
-    image = image.convert("RGB").resize((w, h))
+    image = image.convert("RGB").resize(
+        (w, h)
+    )
 
     img = np.array(
         image,
@@ -431,7 +709,9 @@ def preprocess_image(image, h, w):
     )
 
 
-# -------------------- FORMAT NAME --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# FORMAT NAME
+# ══════════════════════════════════════════════════════════════════════════════
 
 def fmt(name):
 
@@ -444,7 +724,9 @@ def fmt(name):
     )
 
 
-# -------------------- LOAD ASSETS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# LOAD ASSETS
+# ══════════════════════════════════════════════════════════════════════════════
 
 model = load_model()
 
@@ -461,7 +743,9 @@ input_height = model.input_shape[1]
 input_width = model.input_shape[2]
 
 
-# -------------------- HEADER --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# HEADER
+# ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown(
     '<div class="hero-title">🌿 Plant Disease Detector</div>',
@@ -474,7 +758,9 @@ st.markdown(
 )
 
 
-# -------------------- STATS ROW --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# STATS ROW
+# ══════════════════════════════════════════════════════════════════════════════
 
 c1, c2, c3 = st.columns(3)
 
@@ -482,12 +768,19 @@ c1, c2, c3 = st.columns(3)
 with c1:
 
     st.markdown(
-        '''
+        """
         <div class="stat-card">
-            <div class="stat-label">🧠 Model</div>
-            <div class="stat-value">CNN</div>
+
+            <div class="stat-label">
+                🧠 Model
+            </div>
+
+            <div class="stat-value">
+                CNN
+            </div>
+
         </div>
-        ''',
+        """,
         unsafe_allow_html=True
     )
 
@@ -495,12 +788,19 @@ with c1:
 with c2:
 
     st.markdown(
-        f'''
+        f"""
         <div class="stat-card">
-            <div class="stat-label">🌱 Classes</div>
-            <div class="stat-value">{len(class_names)}</div>
+
+            <div class="stat-label">
+                🌱 Classes
+            </div>
+
+            <div class="stat-value">
+                {len(class_names)}
+            </div>
+
         </div>
-        ''',
+        """,
         unsafe_allow_html=True
     )
 
@@ -508,12 +808,19 @@ with c2:
 with c3:
 
     st.markdown(
-        f'''
+        f"""
         <div class="stat-card">
-            <div class="stat-label">📷 Input</div>
-            <div class="stat-value">{input_width}×{input_height}</div>
+
+            <div class="stat-label">
+                📷 Input
+            </div>
+
+            <div class="stat-value">
+                {input_width}×{input_height}
+            </div>
+
         </div>
-        ''',
+        """,
         unsafe_allow_html=True
     )
 
@@ -524,7 +831,9 @@ st.markdown(
 )
 
 
-# -------------------- INPUT TABS --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# INPUT TABS
+# ══════════════════════════════════════════════════════════════════════════════
 
 tab1, tab2 = st.tabs(
     ["📤 Upload Image", "📷 Use Camera"]
@@ -538,12 +847,14 @@ with tab1:
 
     uploaded_file = st.file_uploader(
         "Upload a leaf image",
+
         type=[
             "jpg",
             "png",
             "jpeg",
             "webp"
         ],
+
         label_visibility="collapsed"
     )
 
@@ -567,7 +878,9 @@ with tab2:
         )
 
 
-# -------------------- PREDICTION --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# PREDICTION
+# ══════════════════════════════════════════════════════════════════════════════
 
 if image is not None:
 
@@ -608,18 +921,23 @@ if image is not None:
             np.argmax(prediction)
         )
 
+
         confidence = (
             float(prediction[top_idx]) * 100
         )
 
+
         disease = class_names[top_idx]
+
 
         is_healthy = (
             "healthy" in disease.lower()
         )
 
 
-        # -------------------- CONFIDENCE --------------------
+        # ══════════════════════════════════════════════════════════════════════
+        # CONFIDENCE
+        # ══════════════════════════════════════════════════════════════════════
 
         if confidence >= 80:
 
@@ -658,7 +976,9 @@ if image is not None:
             fill = "conf-fill-red"
 
 
-        # -------------------- RESULT CARD --------------------
+        # ══════════════════════════════════════════════════════════════════════
+        # RESULT CARD
+        # ══════════════════════════════════════════════════════════════════════
 
         st.markdown(
             f"""
@@ -689,6 +1009,7 @@ if image is not None:
                         font-size:0.82rem;
                     "
                 >
+
                     Confidence:
 
                     <b style="color:#a8e063">
@@ -703,22 +1024,28 @@ if image is not None:
         )
 
 
-        # -------------------- LOW CONFIDENCE WARNING --------------------
+        # ══════════════════════════════════════════════════════════════════════
+        # LOW CONFIDENCE WARNING
+        # ══════════════════════════════════════════════════════════════════════
 
         if confidence < 50:
 
             st.markdown(
-                '''
+                """
                 <div class="warn-low">
+
                     Try a clearer, well-lit close-up
                     photo of a single leaf.
+
                 </div>
-                ''',
+                """,
                 unsafe_allow_html=True
             )
 
 
-        # -------------------- TOP PREDICTIONS --------------------
+        # ══════════════════════════════════════════════════════════════════════
+        # TOP PREDICTIONS
+        # ══════════════════════════════════════════════════════════════════════
 
         st.markdown(
             '<div class="tab-header">Top Predictions</div>',
@@ -743,6 +1070,7 @@ if image is not None:
             name = fmt(
                 class_names[idx]
             )
+
 
             conf = (
                 prediction[idx] * 100
@@ -777,7 +1105,9 @@ if image is not None:
             )
 
 
-        # -------------------- TREATMENT TIP --------------------
+        # ══════════════════════════════════════════════════════════════════════
+        # TREATMENT TIP
+        # ══════════════════════════════════════════════════════════════════════
 
         st.markdown(
             f"""
@@ -798,22 +1128,27 @@ if image is not None:
 else:
 
     st.markdown(
-        '''
+        """
         <div class="tip-box">
+
             👆 Upload a leaf image or use your
             camera to get started!
+
         </div>
-        ''',
+        """,
         unsafe_allow_html=True
     )
 
 
-# -------------------- FOOTER --------------------
+# ══════════════════════════════════════════════════════════════════════════════
+# FOOTER
+# ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown(
     "<br><br>",
     unsafe_allow_html=True
 )
+
 
 st.markdown(
     """
@@ -825,7 +1160,10 @@ st.markdown(
             letter-spacing:1px;
         "
     >
-        Built with ❤️ using TensorFlow &amp; Streamlit
+
+        🌱 AgriCare · Built with ❤️ using
+        TensorFlow &amp; Streamlit
+
     </div>
     """,
     unsafe_allow_html=True
